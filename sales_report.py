@@ -25,7 +25,7 @@ for line in f:
 
     # Check to see if salesperson is already added to the list
     if salesperson in salespeople:
-        # Define the position as the index of salesperon in salespeople
+        # Define the position as the index of salespesron in salespeople
         position = salespeople.index(salesperson)
         # Add # of melons sold to parallel position in melons_sold
         melons_sold[position] += melons
@@ -40,3 +40,46 @@ for line in f:
 for i in range(len(salespeople)):
     # Assume lists are parallel, print both lists
     print "{} sold {} melons".format(salespeople[i], melons_sold[i])
+
+
+# Below is my alternate implementation:
+
+
+def parse_file_into_dict(filename):
+    """Read file and parse into dict
+
+    Dict format:
+        key = salesperson_name
+        value = melons_sold
+
+    """
+
+    sales_report = {}
+
+    sales_file = open(filename)
+    for line in sales_file:
+        line = line.strip()
+        entries = line.split('|')
+        name = entries[0]
+        qty_sold = int(entries[2])
+
+        sales_report[name] = sales_report.get(name, 0) + qty_sold
+
+    return sales_report
+
+
+def print_sales_report(sales_report):
+    """Print formatted sales report from dict, sorted alphabetically
+
+    >>> sales_report = {"Alice": 4}
+    >>> print_sales_report(sales_report)
+    Alice sold 4 melons
+
+    """
+
+    for name, qty_sold in sorted(sales_report.items()):
+        print "{} sold {} melons".format(name, qty_sold)
+
+
+sales_report = parse_file_into_dict("sales-report.txt")
+print_sales_report(sales_report)
